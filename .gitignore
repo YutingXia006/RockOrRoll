@@ -1,0 +1,36 @@
+# Virtual Environment
+venv/
+.env/
+env/
+
+# Python generated
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Personal/test files
+tryout.py
+test.py
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Training outputs (optional - remove if u want to track models)
+*.zip
+*.pkl
+logs/
+models/
