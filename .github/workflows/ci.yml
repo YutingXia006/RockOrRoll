@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Smoke test game logic
+        run: python -c "from game import RockOrRollGame; g = RockOrRollGame(); print('game.py OK')"
+
+      - name: Smoke test environment
+        run: python -c "from env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); print('env.py OK')"
+
+      - name: Smoke test action masking
+        run: python -c "from env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); masks = e.action_masks(); assert len(masks) > 0; print('action masking OK')"
+
+      - name: Quick training run
+        run: python smoke_test.py
+from env import RockOrRollEnv
+from sb3_contrib import MaskablePPO
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import DummyVecEnv
+env = make_vec_env(RockOrRollEnv, n_envs=1, vec_env_cls=DummyVecEnv)
+model = MaskablePPO('MlpPolicy', env, n_steps=64, verbose=0)
+model.learn(total_timesteps=512)
+print('training smoke test OK')
+"

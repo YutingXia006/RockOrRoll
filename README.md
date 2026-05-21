@@ -72,4 +72,4 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db
 
 ## License
 
-MIT License — see [LICENSE](LICENSE)
+MIT — free to use, modify and distribute.

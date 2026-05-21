@@ -4,7 +4,7 @@ import optuna
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.maskable.utils import get_action_masks
 from stable_baselines3.common.env_util import make_vec_env
-from env import RockOrRollEnv
+from RockOrRoll.src.env import RockOrRollEnv
 import numpy as np
 
 # --- Config ---
