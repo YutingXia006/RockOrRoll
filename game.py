@@ -82,6 +82,9 @@ class TFTGame:
         self.level = 3
         self.experience = 0
         self.board_cost = 18
+    
+    def reset(self):
+        self.__init__()
 
     # ---------- INCOME ----------
 

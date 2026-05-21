@@ -34,3 +34,13 @@ Thumbs.db
 *.pkl
 logs/
 models/
+
+# MLFlow
+mlruns/
+mlflow.db
+
+# Optuna
+optuna.db
+
+# Tryout
+tryout.py

@@ -2,6 +2,7 @@ import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
 from game import TFTGame, opponent_strength, get_stage
+MAX_STEPS_PER_EPISODE = 750  # max actions pro Episode
 
 MAX_VALUES = {
     "gold": 100,
@@ -22,6 +23,7 @@ class RockOrRollEnv(gym.Env):
     def __init__(self):
         super().__init__()
         self.game = TFTGame()
+        self.current_steps = 0
         self.last_opponent_strength = 0.0
 
         # 0: End turn, 1: Roll, 2: Level up
@@ -59,17 +61,37 @@ class RockOrRollEnv(gym.Env):
                 return -1.0  # Gestorben
         # Kleines Signal jede Runde
         return (self.game.health / MAX_VALUES["health"]) * 0.1
+    
+    def action_masks(self):
+            """
+            Gibt eine Liste von Booleans zurück.
+            Index 0: End turn, Index 1: Roll, Index 2: Level up
+            """
+            mask = [True, True, True]  # Standardmäßig alles erlaubt
+            state = self.game.get_state()
+
+            # 1. Haben wir genug Gold zum Rollen? (Kosten = 2)
+            if state["gold"] < 2:
+                mask[1] = False
+
+            # 2. Haben wir genug Gold für Level Up (Kosten = 4) ODER sind wir Max Level?
+            if state["gold"] < 4 or state["level"] >= 10:
+                mask[2] = False
+
+            return mask
 
     def reset(self, seed=None, options=None): #type: ignore
         super().reset(seed=seed, options=options)
+        self.current_steps = 0
         self.game.reset()
         self.last_opponent_strength = 0.0
         return self._get_obs(), {}
 
     def step(self, action):
+        self.current_steps += 1
         reward = 0.0
         truncated = False
-        terminated = False  # Default hier setzen
+        terminated = False
 
         if action == 0:
             opp = opponent_strength(self.game.round)
@@ -80,12 +102,14 @@ class RockOrRollEnv(gym.Env):
             terminated = game_over
         
         elif action == 1:
-            success = self.game.action_roll()
-            reward = -0.01 if not success else 0.0
+            self.game.action_roll()
+            reward = 0.0
         
         elif action == 2:
-            success = self.game.action_level_up()
-            reward = -0.01 if not success else 0.0
+            self.game.action_level_up()
+            reward = 0.0
+
+        truncated = self.current_steps >= MAX_STEPS_PER_EPISODE
 
         obs = self._get_obs()
         return obs, reward, terminated, truncated, {}
@@ -93,8 +117,8 @@ class RockOrRollEnv(gym.Env):
     def render(self):
         state = self.game.get_state()
         print(f"Round {state['round']} | "
-              f"Gold {state['gold']} | "
-              f"Health {state['health']} | "
-              f"Board {state['board_cost']} | "
-              f"Opponent {self.last_opponent_strength:.1f} | "
-              f"Level {state['level']}")
+            f"Gold {state['gold']} | "
+            f"Health {state['health']} | "
+            f"Board {state['board_cost']} | "
+            f"Opponent {self.last_opponent_strength:.1f} | "
+            f"Level {state['level']}")
