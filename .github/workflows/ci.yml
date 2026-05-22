@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Smoke test game logic
-        run: python -c "from game import RockOrRollGame; g = RockOrRollGame(); print('game.py OK')"
+        run: python -c "from src/game import RockOrRollGame; g = RockOrRollGame(); print('game.py OK')"
 
       - name: Smoke test environment
         run: python -c "from env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); print('env.py OK')"
