@@ -24,10 +24,10 @@ jobs:
         run: python -c "from src/game import RockOrRollGame; g = RockOrRollGame(); print('game.py OK')"
 
       - name: Smoke test environment
-        run: python -c "from env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); print('env.py OK')"
+        run: python -c "from src/env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); print('env.py OK')"
 
       - name: Smoke test action masking
-        run: python -c "from env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); masks = e.action_masks(); assert len(masks) > 0; print('action masking OK')"
+        run: python -c "from src/env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); masks = e.action_masks(); assert len(masks) > 0; print('action masking OK')"
 
       - name: Quick training run
-        run: python smoke_test.py
+        run: python tests/smoke_test.py
