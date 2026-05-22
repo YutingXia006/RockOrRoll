@@ -30,4 +30,4 @@ jobs:
         run: python -c "from src.env import RockOrRollEnv; e = RockOrRollEnv(); e.reset(); masks = e.action_masks(); assert len(masks) > 0; print('action masking OK')"
 
       - name: Quick training run
-        run: python tests.smoke_test.py
+        run: python tests/smoke_test.py
