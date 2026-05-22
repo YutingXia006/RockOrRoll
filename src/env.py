@@ -1,7 +1,7 @@
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
-from RockOrRoll.src.game import TFTGame, opponent_strength, get_stage
+from src.game import TFTGame, opponent_strength, get_stage
 MAX_STEPS_PER_EPISODE = 750  # max actions pro Episode
 
 MAX_VALUES = {
