@@ -1,7 +1,7 @@
 import os
 from sb3_contrib import MaskablePPO
 from sb3_contrib.common.maskable.utils import get_action_masks
-from RockOrRoll.src.env import RockOrRollEnv
+from src.env import RockOrRollEnv
 import numpy as np
 
 MODEL_PATH = "./models/ppo_rockorroll/final_model.zip"
